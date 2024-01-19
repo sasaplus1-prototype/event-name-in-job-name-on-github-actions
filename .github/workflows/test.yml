@@ -1,0 +1,12 @@
+name: test
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  test:
+    name: ${{ github.event_name }} test
+    timeout-minutes: 5
+    steps:
+      - run: echo '${{ github.event_name }}'
