@@ -9,5 +9,22 @@ jobs:
     name: ${{ github.event_name }} test
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    outputs:
+      prefix: ${{ steps.name.outputs.prefix }}
+    steps:
+      - run: |
+          if [ '${{ github.event_name }}' == 'push' ]
+          then
+            echo 'prefix=via push event' >> "$GITHUB_OUTPUT"
+          else
+            echo 'prefix=via pull_request event' >> "$GITHUB_OUTPUT"
+          fi
+        id: name
+  test2:
+    name: ${{ needs.test.outputs.prefix }} test
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs:
+      - test
     steps:
       - run: echo '${{ github.event_name }}'
